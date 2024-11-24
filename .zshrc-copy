@@ -1,0 +1,116 @@
+# oh-my-zsh configuration
+export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME="robbyrussell"
+plugins=(git)
+source $ZSH/oh-my-zsh.sh
+
+# nvm configuration
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# autoload -U add-zsh-hook 
+load-nvmrc() { 
+  local node_version="$(nvm version)" 
+  local nvmrc_path="$(nvm_find_nvmrc)" 
+  if [ -n "$nvmrc_path" ]; then 
+    local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")") 
+    if [ "$nvmrc_node_version" = "N/A" ]; then 
+      nvm install 
+    elif [ "$nvmrc_node_version" != "$node_version" ]; then 
+      nvm use --silent 
+      local formatted_version="$(node --version)"
+      echo -e "\033[32mWINNER-WINNER-CHICKEN-DINNER\033[31m ~ \033[34m${formatted_version:1}\033[0m"
+    fi 
+  fi 
+} 
+add-zsh-hook chpwd load-nvmrc 
+load-nvmrc
+
+# Powerlevel10k instant prompt configuration
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# Set up PATH
+# export PATH="$HOME/.cargo/env:$HOME/bin:$HOME/.local/bin:/usr/local/bin:$(pyenv root)/shims:$PATH"
+
+# export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+
+# Powerlevel10k theme
+source ~/powerlevel10k/powerlevel10k.zsh-theme
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Function to set the terminal title
+function set_title() {
+  print -Pn "\e]0;%~\a"
+}
+
+# Call set_title before each prompt
+precmd_functions+=(set_title)
+
+# Disable Oh My Zsh's built-in terminal title if you're using Oh My Zsh
+DISABLE_AUTO_TITLE="true"
+
+# bun completions
+# [ -s "/Users/ichavez/.bun/_bun" ] && source "/Users/ichavez/.bun/_bun"
+
+export GH_PKG_TOKEN="TOKEN HERE"
+
+# bun
+# export BUN_INSTALL="$HOME/.bun"
+# export PATH="$BUN_INSTALL/bin:$PATH"
+
+# export PATH="/Users/ichavez/Library/Application Support/fnm:$PATH"
+# eval "`fnm env`"
+
+alias reload-zsh="source ~/.zshrc"
+alias nrb="npm run build"
+alias edit-zsh="nvim ~/.zshrc"
+alias edit-wez="nvim .wezterm.lua"
+alias vim="nvim"
+alias vi= "nvim"
+alias lg="lazygit"
+alias nrd="npm run dev"
+alias nrs="npm run start"
+alias nrw="npm run watch"
+alias notes="cd Documents/izickVault/"
+alias nrdd="npm run dev-demo"
+alias gcm="git checkout main"
+alias edit-aero="nvim ~/.config/aerospace/aerospace.toml"
+alias rm-node="rm -rf node_modules"
+alias rm-nxt="rm -rf .next"
+alias ssui="cd edu-repos/se-supersonic-ui/"
+alias ssmw="cd edu-repos/se-supersonic-middleware/"
+alias ssp="cd edu-repos/se-supersonic-plugin"
+
+# history setup
+HISTFILE=$HOME/.zhistory
+SAVEHIST=1000
+HISTSIZE=999
+setopt share_history 
+setopt hist_expire_dups_first
+setopt hist_ignore_dups
+setopt hist_verify
+
+# completion using arrow keys (based on history)
+bindkey '^[[A' history-search-backward
+bindkey '^[[B' history-search-forward
+export PATH=$PATH:/Users/ichavez/Downloads/zig-macos-aarch64-0.14.0-dev.2245+4fc295dc0
+
+
+# ---- Eza (better ls) -----
+alias ls="eza --icons=always"
+
+# ---- Zoxide (better cd) ----
+eval "$(zoxide init zsh)"
+
+alias cd="z"
+plugins=(git)
+
+source $ZSH/oh-my-zsh.sh
+
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
