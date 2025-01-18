@@ -115,6 +115,8 @@ alt-4 = 'workspace 4'
 alt-5 = 'workspace 5'
 # Browser
 alt-b = 'workspace B'
+# Discord
+alt-d = 'workspace D'
 # Music
 alt-m = 'workspace M'
 # i message
@@ -140,6 +142,8 @@ alt-shift-4 = 'move-node-to-workspace 4'
 alt-shift-5 = 'move-node-to-workspace 5'
 # Browser
 alt-shift-b = 'move-node-to-workspace B'
+# Discord
+alt-shift-d = 'move-node-to-workspace D'
 # Music
 alt-shift-m = 'move-node-to-workspace M'
 # i message
@@ -206,8 +210,12 @@ if.app-id = 'company.thebrowser.Browser'
 run = "move-node-to-workspace B"
 
 [[on-window-detected]]
-if.app-id = 'org.mozilla.com.zen.browser'
+if.app-id = 'app.zen-browser.zen'
 run = "move-node-to-workspace B"
+
+[[on-window-detected]]
+if.app-id = 'com.tinyspeck.slackmacgap'
+run = "move-node-to-workspace D"
 
 [[on-window-detected]]
 if.app-id = 'com.apple.MobileSMS'
@@ -232,6 +240,13 @@ run = "move-node-to-workspace S"
 [[on-window-detected]]
 if.app-id = 'com.github.wez.wezterm'
 run = "move-node-to-workspace T"
+
+[[on-window-detected]]
+if.app-id="com.mitchellh.ghostty"
+run= [
+  "layout tiling",
+  "move-node-to-workspace T"
+]
 
 [[on-window-detected]]
 if.app-id = 'com.getflywheel.lightning.local'
