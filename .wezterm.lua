@@ -1,20 +1,65 @@
--- Pull in the wezterm API
 local wezterm = require("wezterm")
 local SOLID_LEFT_ARROW = wezterm.nerdfonts.ple_left_half_circle_thick
 local SOLID_RIGHT_ARROW = wezterm.nerdfonts.ple_right_half_circle_thick
 
--- This will hold the configuration.
 local config = wezterm.config_builder()
 
 local act = wezterm.action
 
-config.color_scheme = "Tokyo Night"
--- For example, changing the color scheme:
+-- Your existing appearance functions
+-- local function get_appearance()
+-- 	if wezterm.gui then
+-- 		return wezterm.gui.get_appearance()
+-- 	end
+-- 	return "Dark"
+-- end
+
+-- local function scheme_for_appearance(appearance)
+-- 	if appearance:find("Dark") then
+-- 		return "Tokyo Night"
+-- 	else
+-- 		return "Tokyo Night Day"
+-- 	end
+-- end
+
+-- Add system appearance change detection and Neovim sync
+-- wezterm.on("window-config-reloaded", function(window)
+-- 	local appearance = get_appearance()
+-- 	-- Send the appearance change to Neovim
+-- 	local panes = window:mux_window():panes()
+-- 	for _, pane in ipairs(panes) do
+-- 		-- Check if the pane is running Neovim
+-- 		local process_name = pane:get_foreground_process_name()
+-- 		if process_name and process_name:find("n?vim") then
+-- 			local mode = appearance:find("Dark") and "dark" or "light"
+-- 			pane:spawn({
+-- 				args = { "bash", "-c", string.format("nvim --remote-send ':lua SetSystemTheme(\"%s\")<CR>'", mode) },
+-- 			})
+-- 		end
+-- 	end
+-- end)
+
+config.color_scheme = "Kanagawa (Gogh)"
+
+-- Neovim Configuration (init.lua)
+-- function SetSystemTheme(mode)
+-- 	if mode == "dark" then
+-- 		vim.cmd("colorscheme tokyonight-night")
+-- 		vim.opt.background = "dark"
+-- 		vim.opt.transparent = true
+-- 	else
+-- 		vim.cmd("colorscheme tokyonight-day")
+-- 		vim.opt.background = "light"
+-- 		vim.opt.transparent = false
+-- 	end
+-- end
+
+config.max_fps = 240
 config.colors = {
 	-- 	foreground = "#CBE0F0",
-	-- 	background = "#011423",
-	-- 	cursor_bg = "#47FF9C",
-	-- 	cursor_border = "#47FF9C",
+	-- background = "#0A0A0A",
+	cursor_bg = "#E52E2E",
+	-- cursor_border = "#47FF9C",
 	-- 	cursor_fg = "#011423",
 	-- 	selection_bg = "#706b4e",
 	-- 	selection_fg = "#f3d9c4",
@@ -76,7 +121,6 @@ config.colors = {
 -- }
 
 config.tab_max_width = 9000
-config.font = wezterm.font("MesloLGS Nerd Font Mono")
 config.font_size = 21
 -- How many lines of scrollback you want to retain per tab
 config.scrollback_lines = 3500
@@ -90,7 +134,6 @@ config.window_decorations = "RESIZE"
 config.window_background_opacity = 0.90
 config.macos_window_background_blur = 59
 config.tab_bar_at_bottom = true
-config.line_height = 0.9
 
 -- diable close confirmation
 config.window_close_confirmation = "NeverPrompt"
@@ -220,31 +263,33 @@ end
 
 wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
 	local edge_background = "rgba(0,0,0,0)"
-	local background = "#214969"
-	local foreground = "#CBE0F0"
+	local background = "#223249" -- Darker blue from Kanagawa
+	local foreground = "#DCD7BA" -- Light text color from Kanagawa
+
 	if tab.is_active then
-		background = "#47FF9C"
-		foreground = "#011423"
+		background = "#76946A" -- Soft green from Kanagawa
+		foreground = "#1F1F28" -- Dark background color from Kanagawa
 	elseif hover then
-		background = "#44FFB1"
-		foreground = "#011423"
+		background = "#98BB6C" -- Brighter green from Kanagawa
+		foreground = "#1F1F28" -- Dark background color from Kanagawa
 	else
 		-- Change the background and foreground based on the tab index
 		local colors = {
-			"#7aa2f7", -- Blue
-			"#bb9af7", -- Purple
-			"#9ece6a", -- Green
-			"#e0af68", -- Orange
-			"#f7768e", -- Pink
-			"#7dcfff", -- Light Blue
-			"#7aa2f7", -- Blue
-			"#bb9af7", -- Purple
-			"#9ece6a", -- Green
-			"#e0af68", -- Orange
+			"#7E9CD8", -- Blue from Kanagawa
+			"#957FB8", -- Purple from Kanagawa
+			"#76946A", -- Green from Kanagawa
+			"#DCA561", -- Orange/gold from Kanagawa
+			"#E82424", -- Red from Kanagawa
+			"#7FB4CA", -- Light blue from Kanagawa
+			"#7E9CD8", -- Blue (repeat) from Kanagawa
+			"#957FB8", -- Purple (repeat) from Kanagawa
+			"#76946A", -- Green (repeat) from Kanagawa
+			"#DCA561", -- Orange/gold (repeat) from Kanagawa
 		}
-		background = colors[tab.tab_index + 1] or "#214969"
-		foreground = "#011423"
+		background = colors[tab.tab_index + 1] or "#223249"
+		foreground = "#1F1F28" -- Dark background for contrast
 	end
+
 	local edge_foreground = background
 	local title = tab_title(tab)
 	-- Use a default title for new tabs or when the title is not set
@@ -256,6 +301,7 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
 	local max_title_width = max_width - tab_index_space -- -4 for arrows and spaces
 	-- Truncate the title if necessary
 	title = truncate_title(title, max_title_width)
+
 	return {
 		{ Background = { Color = edge_background } },
 		{ Foreground = { Color = edge_foreground } },
