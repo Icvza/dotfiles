@@ -18,17 +18,10 @@ after-login-command = []
 #    'exec-and-forget borders active_color=0xff00ff00 inactive_color=0xff494d64 width=5.0'
 # ]
 
-# after-startup-command = [
-#     # Force kill any existing borders process first
-#     'exec-and-forget killall borders',
-#     # Small delay to ensure cleanup
-#     'exec-and-forget sleep 0.5',
-#     # Start borders with your preferred colors
-#     'exec-and-forget borders active_color=0xff00ff00 inactive_color=0xff494d64 width=5.0',
-# ]
 after-startup-command = [
-  'exec-and-forget borders active_color=0xffff5349 inactive_color=0xff1e90ff width=8.0'
+  'exec-and-forget borders active_color="gradient(top_left=0xff00ffff,bottom_right=0xffff00ff)" inactive_color=0xff494d64 width=8.0'
 ]
+
 # Start AeroSpace at login
 start-at-login = true
 
@@ -219,8 +212,9 @@ S = '^built-in'
 V = 'main'
 W = '^built-in'
 # Z = 'main'
-T = 'main'
+# T = 'main'
 # change this because l a nd h ae already dtaken
+
 [[on-window-detected]]
 if.app-id = 'com.anthropic.claudefordesktop'
 run = "move-node-to-workspace L"

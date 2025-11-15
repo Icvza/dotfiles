@@ -121,6 +121,7 @@ config.colors = {
 -- }
 
 config.tab_max_width = 9000
+config.font = wezterm.font("JetBrains Mono")
 config.font_size = 21
 -- How many lines of scrollback you want to retain per tab
 config.scrollback_lines = 3500
